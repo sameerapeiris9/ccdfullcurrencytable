@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>FX Positions Dashboard</title>
+
+<script src="https://cdn.jsdelivr.net/gh/tableau/extensions-api/lib/tableau.extensions.1.latest.js"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+:root{
+  --bg:#f3f6fb;
+  --panel:#ffffff;
+  --border:#e2e8f0;
+  --text:#0f172a;
+  --muted:#64748b;
+}
+
+body{
+  width:100%;
+  height:100vh;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at top left,#f8fbff,#eef3f9);
+  font-family:'Inter',sans-serif;
+  padding:10px;
+}
+
+.panel{
+  width:100%;
+  height:100%;
+  background:rgba(255,255,255,.88);
+  backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,.7);
+  border-radius:22px;
+  padding:18px;
+  box-shadow:
+    0 1px 2px rgba(15,23,42,.03),
+    0 12px 30px rgba(15,23,42,.08);
+  overflow:auto;
+}
+
+/* HEADER */
+
+.header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:18px;
+}
+
+.title{
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.18em;
+  color:#64748b;
+}
+
+.live{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:11px;
+  font-weight:700;
+  color:#16a34a;
+}
+
+.dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#16a34a;
+  animation:pulse 1.8s infinite;
+}
+
+@keyframes pulse{
+  0%{
+    transform:scale(1);
+    opacity:1;
+  }
+  50%{
+    transform:scale(1.7);
+    opacity:.35;
+  }
+  100%{
+    transform:scale(1);
+    opacity:1;
+  }
+}
+
+/* GRID */
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:14px;
+}
+
+/* CARD */
+
+.card{
+  position:relative;
+  overflow:hidden;
+
+  background:white;
+  border:1px solid var(--border);
+
+  border-radius:18px;
+
+  padding:14px;
+
+  transition:.28s ease;
+
+  box-shadow:
+    0 2px 4px rgba(15,23,42,.03);
+}
+
+.card:hover{
+  transform:translateY(-3px);
+
+  box-shadow:
+    0 12px 25px rgba(15,23,42,.08);
+}
+
+.card::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:3px;
+  background:var(--accent);
+}
+
+/* TOP */
+
+.top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:12px;
+}
+
+.left{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.flag{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:var(--accent);
+
+  box-shadow:
+    0 0 0 4px color-mix(in srgb, var(--accent) 15%, white);
+}
+
+.code{
+  font-size:12px;
+  font-weight:700;
+  color:#64748b;
+  letter-spacing:.13em;
+}
+
+/* CHANGE */
+
+.change{
+  font-size:11px;
+  font-weight:700;
+
+  padding:5px 10px;
+
+  border-radius:999px;
+
+  font-variant-numeric:tabular-nums;
+}
+
+.up{
+  background:#dcfce7;
+  color:#15803d;
+}
+
+.down{
+  background:#fee2e2;
+  color:#b91c1c;
+}
+
+.flat{
+  background:#eff6ff;
+  color:#2563eb;
+}
+
+/* VALUE */
+
+.value{
+  font-size:30px;
+  font-weight:800;
+  line-height:1;
+
+  color:#0f172a;
+
+  letter-spacing:-0.04em;
+
+  margin-bottom:12px;
+
+  font-variant-numeric:tabular-nums;
+}
+
+/* BOTTOM */
+
+.bottom{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+}
+
+.label{
+  font-size:11px;
+  color:#94a3b8;
+}
+
+/* MINI SPARK */
+
+.spark{
+  display:flex;
+  align-items:flex-end;
+  gap:2px;
+  height:24px;
+}
+
+.spark span{
+  width:4px;
+  border-radius:999px;
+  background:var(--accent);
+  opacity:.8;
+}
+
+/* LOADING */
+
+.loading{
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#64748b;
+  font-size:14px;
+  font-weight:600;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="panel">
+
+  <div class="header">
+
+    <div class="title">
+      FOREIGN CURRENCY POSITIONS
+    </div>
+
+    <div class="live">
+      <div class="dot"></div>
+      LIVE
+    </div>
+
+  </div>
+
+  <div class="grid" id="grid">
+
+    <div class="loading">
+      Loading FX Positions...
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+'use strict';
+
+/* =========================
+   CURRENCY COLORS
+========================= */
+
+const COLORS = {
+  USD:'#2563eb',
+  EUR:'#003399',
+  GBP:'#7c3aed',
+  AUD:'#06b6d4',
+  JPY:'#e11d48',
+  CAD:'#dc2626',
+  CHF:'#ef4444',
+  SGD:'#ec4899',
+  CNY:'#f97316',
+  INR:'#fb923c',
+  KWD:'#16a34a',
+  SAR:'#059669',
+  AED:'#14b8a6',
+  HKD:'#ea580c',
+  THB:'#9333ea',
+  MYR:'#be123c',
+  BHD:'#dc2626',
+  OMR:'#ef4444',
+  NZD:'#2563eb',
+  SEK:'#0284c7',
+  DKK:'#a21caf',
+  NOK:'#dc2626',
+  QAR:'#881337',
+  JOD:'#15803d',
+  default:'#64748b'
+};
+
+/* =========================
+   FORMAT NUMBER
+========================= */
+
+function formatNumber(n){
+
+  if(n === null || isNaN(n)) return '—';
+
+  return Number(n).toLocaleString();
+
+}
+
+/* =========================
+   SPARKLINE
+========================= */
+
+function generateSparkline(){
+
+  let html='';
+
+  for(let i=0;i<9;i++){
+
+    const h=Math.floor(Math.random()*18)+5;
+
+    html += `
+      <span style="height:${h}px"></span>
+    `;
+
+  }
+
+  return html;
+
+}
+
+/* =========================
+   CREATE CARD
+========================= */
+
+function createCard(currency,value,change){
+
+  const color = COLORS[currency] || COLORS.default;
+
+  let direction='flat';
+
+  if(change > 0){
+    direction='up';
+  }
+  else if(change < 0){
+    direction='down';
+  }
+
+  const sign = change > 0 ? '+' : '';
+
+  const card = document.createElement('div');
+
+  card.className='card';
+
+  card.style.setProperty('--accent',color);
+
+  card.innerHTML = `
+
+    <div class="top">
+
+      <div class="left">
+
+        <div class="flag"></div>
+
+        <div class="code">
+          ${currency}
+        </div>
+
+      </div>
+
+      <div class="change ${direction}">
+        ${sign}${formatNumber(change)}
+      </div>
+
+    </div>
+
+    <div class="value">
+      ${formatNumber(value)}
+    </div>
+
+    <div class="bottom">
+
+      <div class="label">
+        Net Position
+      </div>
+
+      <div class="spark">
+        ${generateSparkline()}
+      </div>
+
+    </div>
+
+  `;
+
+  return card;
+
+}
+
+/* =========================
+   RENDER
+========================= */
+
+function render(rows){
+
+  const grid = document.getElementById('grid');
+
+  grid.innerHTML='';
+
+  rows.forEach(row=>{
+
+    const card = createCard(
+      row.currency,
+      row.value,
+      row.change
+    );
+
+    grid.appendChild(card);
+
+  });
+
+}
+
+/* =========================
+   LOAD DATA
+========================= */
+
+async function loadData(){
+
+  try{
+
+    const worksheet =
+      tableau.extensions.worksheetContent.worksheet;
+
+    const reader =
+      await worksheet.getSummaryDataReaderAsync();
+
+    const rows=[];
+
+    for(let p=0;p<reader.pageCount;p++){
+
+      const page =
+        await reader.getPageAsync(p);
+
+      page.data.forEach(r=>{
+
+        rows.push({
+
+          currency:
+            r[0]?.formattedValue || '',
+
+          value:
+            Number(r[1]?.value || 0),
+
+          change:
+            Number(r[2]?.value || 0)
+
+        });
+
+      });
+
+    }
+
+    await reader.releaseAsync();
+
+    render(rows);
+
+  }
+  catch(err){
+
+    console.error(err);
+
+    document.getElementById('grid').innerHTML=`
+
+      <div class="loading">
+        Unable to load Tableau data
+      </div>
+
+    `;
+
+  }
+
+}
+
+/* =========================
+   INIT
+========================= */
+
+window.onload = async function(){
+
+  await tableau.extensions.initializeAsync();
+
+  const worksheet =
+    tableau.extensions.worksheetContent.worksheet;
+
+  await loadData();
+
+  worksheet.addEventListener(
+    tableau.TableauEventType.SummaryDataChanged,
+    loadData
+  );
+
+};
+
+</script>
+
+</body>
+</html>

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 
-<title>FX Positions Dashboard</title>
+<title>FX Positions</title>
 
 <script src="https://cdn.jsdelivr.net/gh/tableau/extensions-api/lib/tableau.extensions.1.latest.js"></script>
 
@@ -19,7 +19,7 @@
 }
 
 :root{
-  --bg:#f3f6fb;
+  --bg:#f4f7fb;
   --panel:#ffffff;
   --border:#e2e8f0;
   --text:#0f172a;
@@ -30,157 +30,269 @@ body{
   width:100%;
   height:100vh;
   overflow:hidden;
-  background:
-    radial-gradient(circle at top left,#f8fbff,#eef3f9);
+
   font-family:'Inter',sans-serif;
+
+  background:
+    radial-gradient(circle at top left,#f8fbff,#eef3f8);
+
   padding:10px;
 }
 
+/* PANEL */
+
 .panel{
+
   width:100%;
   height:100%;
-  background:rgba(255,255,255,.88);
-  backdrop-filter:blur(20px);
-  border:1px solid rgba(255,255,255,.7);
+
+  background:rgba(255,255,255,.92);
+
+  border:1px solid rgba(255,255,255,.8);
+
   border-radius:22px;
-  padding:18px;
+
+  backdrop-filter:blur(18px);
+
   box-shadow:
-    0 1px 2px rgba(15,23,42,.03),
-    0 12px 30px rgba(15,23,42,.08);
-  overflow:auto;
+    0 10px 30px rgba(15,23,42,.06),
+    0 1px 2px rgba(15,23,42,.03);
+
+  overflow:hidden;
+
+  display:flex;
+  flex-direction:column;
 }
 
 /* HEADER */
 
 .header{
+
+  padding:18px 20px 12px 20px;
+
   display:flex;
   align-items:center;
   justify-content:space-between;
-  margin-bottom:18px;
+
+  border-bottom:1px solid #eef2f7;
 }
 
 .title{
-  font-size:13px;
-  font-weight:700;
+  font-size:12px;
+  font-weight:800;
   letter-spacing:.18em;
   color:#64748b;
 }
 
 .live{
+
   display:flex;
   align-items:center;
   gap:8px;
+
   font-size:11px;
   font-weight:700;
+
   color:#16a34a;
 }
 
-.dot{
+.live-dot{
+
   width:8px;
   height:8px;
+
   border-radius:50%;
+
   background:#16a34a;
+
   animation:pulse 1.8s infinite;
 }
 
 @keyframes pulse{
+
   0%{
     transform:scale(1);
     opacity:1;
   }
+
   50%{
     transform:scale(1.7);
     opacity:.35;
   }
+
   100%{
     transform:scale(1);
     opacity:1;
   }
+
 }
 
-/* GRID */
+/* LIST */
 
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:14px;
+.list{
+
+  flex:1;
+
+  overflow:auto;
+
+  padding:10px;
 }
 
-/* CARD */
+/* ROW */
 
-.card{
+.row{
+
   position:relative;
-  overflow:hidden;
 
-  background:white;
-  border:1px solid var(--border);
-
-  border-radius:18px;
-
-  padding:14px;
-
-  transition:.28s ease;
-
-  box-shadow:
-    0 2px 4px rgba(15,23,42,.03);
-}
-
-.card:hover{
-  transform:translateY(-3px);
-
-  box-shadow:
-    0 12px 25px rgba(15,23,42,.08);
-}
-
-.card::before{
-  content:'';
-  position:absolute;
-  top:0;
-  left:0;
-  width:100%;
-  height:3px;
-  background:var(--accent);
-}
-
-/* TOP */
-
-.top{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  margin-bottom:12px;
+
+  gap:10px;
+
+  padding:14px 16px;
+
+  margin-bottom:10px;
+
+  border-radius:18px;
+
+  background:white;
+
+  border:1px solid #edf2f7;
+
+  transition:.25s ease;
+
+  overflow:hidden;
 }
+
+.row:hover{
+
+  transform:translateY(-2px);
+
+  box-shadow:
+    0 10px 20px rgba(15,23,42,.06);
+}
+
+.row::before{
+
+  content:'';
+
+  position:absolute;
+
+  left:0;
+  top:0;
+
+  width:4px;
+  height:100%;
+
+  background:var(--accent);
+}
+
+/* LEFT */
 
 .left{
+
   display:flex;
   align-items:center;
-  gap:8px;
+
+  gap:12px;
+
+  min-width:0;
 }
 
-.flag{
+/* ICON */
+
+.icon-wrap{
+
+  width:38px;
+  height:38px;
+
+  border-radius:12px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background:
+    color-mix(in srgb,var(--accent) 12%, white);
+
+  flex-shrink:0;
+}
+
+.icon{
+
   width:10px;
   height:10px;
+
   border-radius:50%;
+
   background:var(--accent);
 
   box-shadow:
-    0 0 0 4px color-mix(in srgb, var(--accent) 15%, white);
+    0 0 0 5px color-mix(in srgb,var(--accent) 18%, white);
+}
+
+/* TEXT */
+
+.info{
+
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+
+  min-width:0;
 }
 
 .code{
-  font-size:12px;
-  font-weight:700;
-  color:#64748b;
-  letter-spacing:.13em;
+
+  font-size:13px;
+  font-weight:800;
+
+  color:#0f172a;
+
+  letter-spacing:.08em;
+}
+
+.sub{
+
+  font-size:11px;
+
+  color:#94a3b8;
+}
+
+/* RIGHT */
+
+.right{
+
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+
+  gap:6px;
+
+  flex-shrink:0;
+}
+
+.value{
+
+  font-size:22px;
+  font-weight:800;
+
+  color:#0f172a;
+
+  letter-spacing:-0.03em;
+
+  font-variant-numeric:tabular-nums;
 }
 
 /* CHANGE */
 
 .change{
+
   font-size:11px;
   font-weight:700;
 
-  padding:5px 10px;
+  padding:4px 9px;
 
   border-radius:999px;
 
@@ -202,60 +314,19 @@ body{
   color:#2563eb;
 }
 
-/* VALUE */
-
-.value{
-  font-size:30px;
-  font-weight:800;
-  line-height:1;
-
-  color:#0f172a;
-
-  letter-spacing:-0.04em;
-
-  margin-bottom:12px;
-
-  font-variant-numeric:tabular-nums;
-}
-
-/* BOTTOM */
-
-.bottom{
-  display:flex;
-  align-items:flex-end;
-  justify-content:space-between;
-}
-
-.label{
-  font-size:11px;
-  color:#94a3b8;
-}
-
-/* MINI SPARK */
-
-.spark{
-  display:flex;
-  align-items:flex-end;
-  gap:2px;
-  height:24px;
-}
-
-.spark span{
-  width:4px;
-  border-radius:999px;
-  background:var(--accent);
-  opacity:.8;
-}
-
 /* LOADING */
 
 .loading{
+
   width:100%;
   height:100%;
+
   display:flex;
   align-items:center;
   justify-content:center;
+
   color:#64748b;
+
   font-size:14px;
   font-weight:600;
 }
@@ -274,13 +345,16 @@ body{
     </div>
 
     <div class="live">
-      <div class="dot"></div>
+
+      <div class="live-dot"></div>
+
       LIVE
+
     </div>
 
   </div>
 
-  <div class="grid" id="grid">
+  <div class="list" id="list">
 
     <div class="loading">
       Loading FX Positions...
@@ -294,11 +368,10 @@ body{
 
 'use strict';
 
-/* =========================
-   CURRENCY COLORS
-========================= */
+/* COLORS */
 
-const COLORS = {
+const COLORS={
+
   USD:'#2563eb',
   EUR:'#003399',
   GBP:'#7c3aed',
@@ -323,50 +396,26 @@ const COLORS = {
   NOK:'#dc2626',
   QAR:'#881337',
   JOD:'#15803d',
+
   default:'#64748b'
+
 };
 
-/* =========================
-   FORMAT NUMBER
-========================= */
+/* FORMAT */
 
 function formatNumber(n){
 
-  if(n === null || isNaN(n)) return '—';
+  if(n===null || isNaN(n)) return '—';
 
   return Number(n).toLocaleString();
 
 }
 
-/* =========================
-   SPARKLINE
-========================= */
+/* CREATE ROW */
 
-function generateSparkline(){
+function createRow(currency,value,change){
 
-  let html='';
-
-  for(let i=0;i<9;i++){
-
-    const h=Math.floor(Math.random()*18)+5;
-
-    html += `
-      <span style="height:${h}px"></span>
-    `;
-
-  }
-
-  return html;
-
-}
-
-/* =========================
-   CREATE CARD
-========================= */
-
-function createCard(currency,value,change){
-
-  const color = COLORS[currency] || COLORS.default;
+  const color=COLORS[currency] || COLORS.default;
 
   let direction='flat';
 
@@ -377,26 +426,42 @@ function createCard(currency,value,change){
     direction='down';
   }
 
-  const sign = change > 0 ? '+' : '';
+  const sign=change > 0 ? '+' : '';
 
-  const card = document.createElement('div');
+  const row=document.createElement('div');
 
-  card.className='card';
+  row.className='row';
 
-  card.style.setProperty('--accent',color);
+  row.style.setProperty('--accent',color);
 
-  card.innerHTML = `
+  row.innerHTML=`
 
-    <div class="top">
+    <div class="left">
 
-      <div class="left">
+      <div class="icon-wrap">
 
-        <div class="flag"></div>
+        <div class="icon"></div>
+
+      </div>
+
+      <div class="info">
 
         <div class="code">
           ${currency}
         </div>
 
+        <div class="sub">
+          Treasury Position
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="right">
+
+      <div class="value">
+        ${formatNumber(value)}
       </div>
 
       <div class="change ${direction}">
@@ -405,71 +470,51 @@ function createCard(currency,value,change){
 
     </div>
 
-    <div class="value">
-      ${formatNumber(value)}
-    </div>
-
-    <div class="bottom">
-
-      <div class="label">
-        Net Position
-      </div>
-
-      <div class="spark">
-        ${generateSparkline()}
-      </div>
-
-    </div>
-
   `;
 
-  return card;
+  return row;
 
 }
 
-/* =========================
-   RENDER
-========================= */
+/* RENDER */
 
 function render(rows){
 
-  const grid = document.getElementById('grid');
+  const list=document.getElementById('list');
 
-  grid.innerHTML='';
+  list.innerHTML='';
 
   rows.forEach(row=>{
 
-    const card = createCard(
+    const el=createRow(
       row.currency,
       row.value,
       row.change
     );
 
-    grid.appendChild(card);
+    list.appendChild(el);
 
   });
 
 }
 
-/* =========================
-   LOAD DATA
-========================= */
+/* LOAD DATA */
 
 async function loadData(){
 
   try{
 
-    const worksheet =
+    const worksheet=
       tableau.extensions.worksheetContent.worksheet;
 
-    const reader =
+    const reader=
       await worksheet.getSummaryDataReaderAsync();
 
-    const rows=[];
+    let rows=[];
 
     for(let p=0;p<reader.pageCount;p++){
 
-      const page =
+      const page=
         await reader.getPageAsync(p);
 
       page.data.forEach(r=>{
@@ -500,7 +545,7 @@ async function loadData(){
 
     console.error(err);
 
-    document.getElementById('grid').innerHTML=`
+    document.getElementById('list').innerHTML=`
 
       <div class="loading">
         Unable to load Tableau data
@@ -512,15 +557,13 @@ async function loadData(){
 
 }
 
-/* =========================
-   INIT
-========================= */
+/* INIT */
 
-window.onload = async function(){
+window.onload=async function(){
 
   await tableau.extensions.initializeAsync();
 
-  const worksheet =
+  const worksheet=
     tableau.extensions.worksheetContent.worksheet;
 
   await loadData();

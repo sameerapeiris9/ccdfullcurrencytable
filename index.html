@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 
-<title>FX Positions</title>
+<title>Compact FX Positions</title>
 
 <script src="https://cdn.jsdelivr.net/gh/tableau/extensions-api/lib/tableau.extensions.1.latest.js"></script>
 
@@ -27,16 +27,18 @@
 }
 
 body{
+
   width:100%;
   height:100vh;
-  overflow:hidden;
 
-  font-family:'Inter',sans-serif;
+  overflow:hidden;
 
   background:
     radial-gradient(circle at top left,#f8fbff,#eef3f8);
 
-  padding:10px;
+  font-family:'Inter',sans-serif;
+
+  padding:8px;
 }
 
 /* PANEL */
@@ -48,15 +50,14 @@ body{
 
   background:rgba(255,255,255,.92);
 
+  backdrop-filter:blur(16px);
+
+  border-radius:20px;
+
   border:1px solid rgba(255,255,255,.8);
 
-  border-radius:22px;
-
-  backdrop-filter:blur(18px);
-
   box-shadow:
-    0 10px 30px rgba(15,23,42,.06),
-    0 1px 2px rgba(15,23,42,.03);
+    0 8px 25px rgba(15,23,42,.06);
 
   overflow:hidden;
 
@@ -68,19 +69,27 @@ body{
 
 .header{
 
-  padding:18px 20px 12px 20px;
+  height:42px;
+
+  flex-shrink:0;
 
   display:flex;
   align-items:center;
   justify-content:space-between;
 
+  padding:0 16px;
+
   border-bottom:1px solid #eef2f7;
 }
 
 .title{
-  font-size:12px;
+
+  font-size:11px;
+
   font-weight:800;
+
   letter-spacing:.18em;
+
   color:#64748b;
 }
 
@@ -88,18 +97,18 @@ body{
 
   display:flex;
   align-items:center;
-  gap:8px;
+  gap:7px;
 
-  font-size:11px;
+  font-size:10px;
   font-weight:700;
 
   color:#16a34a;
 }
 
-.live-dot{
+.dot{
 
-  width:8px;
-  height:8px;
+  width:7px;
+  height:7px;
 
   border-radius:50%;
 
@@ -127,53 +136,58 @@ body{
 
 }
 
-/* LIST */
+/* GRID */
 
-.list{
+.grid{
 
   flex:1;
 
   overflow:auto;
 
   padding:10px;
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(auto-fit,minmax(160px,1fr));
+
+  gap:8px;
 }
 
-/* ROW */
+/* CARD */
 
-.row{
+.card{
 
   position:relative;
 
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
+  height:62px;
 
-  gap:10px;
-
-  padding:14px 16px;
-
-  margin-bottom:10px;
-
-  border-radius:18px;
+  border-radius:16px;
 
   background:white;
 
   border:1px solid #edf2f7;
 
-  transition:.25s ease;
+  padding:10px 12px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
 
   overflow:hidden;
+
+  transition:.22s ease;
 }
 
-.row:hover{
+.card:hover{
 
   transform:translateY(-2px);
 
   box-shadow:
-    0 10px 20px rgba(15,23,42,.06);
+    0 8px 18px rgba(15,23,42,.06);
 }
 
-.row::before{
+.card::before{
 
   content:'';
 
@@ -182,7 +196,7 @@ body{
   left:0;
   top:0;
 
-  width:4px;
+  width:3px;
   height:100%;
 
   background:var(--accent);
@@ -195,7 +209,7 @@ body{
   display:flex;
   align-items:center;
 
-  gap:12px;
+  gap:10px;
 
   min-width:0;
 }
@@ -204,97 +218,80 @@ body{
 
 .icon-wrap{
 
-  width:38px;
-  height:38px;
+  width:28px;
+  height:28px;
 
-  border-radius:12px;
+  border-radius:10px;
+
+  background:
+    color-mix(in srgb,var(--accent) 12%, white);
 
   display:flex;
   align-items:center;
   justify-content:center;
-
-  background:
-    color-mix(in srgb,var(--accent) 12%, white);
 
   flex-shrink:0;
 }
 
 .icon{
 
-  width:10px;
-  height:10px;
+  width:8px;
+  height:8px;
 
   border-radius:50%;
 
   background:var(--accent);
 
   box-shadow:
-    0 0 0 5px color-mix(in srgb,var(--accent) 18%, white);
+    0 0 0 4px color-mix(in srgb,var(--accent) 15%, white);
 }
 
 /* TEXT */
 
-.info{
+.text{
 
   display:flex;
   flex-direction:column;
-  gap:4px;
+
+  gap:3px;
 
   min-width:0;
 }
 
 .code{
 
-  font-size:13px;
+  font-size:12px;
   font-weight:800;
 
-  color:#0f172a;
-
   letter-spacing:.08em;
-}
 
-.sub{
-
-  font-size:11px;
-
-  color:#94a3b8;
-}
-
-/* RIGHT */
-
-.right{
-
-  display:flex;
-  flex-direction:column;
-  align-items:flex-end;
-
-  gap:6px;
-
-  flex-shrink:0;
+  color:#0f172a;
 }
 
 .value{
 
-  font-size:22px;
-  font-weight:800;
+  font-size:15px;
+  font-weight:700;
 
-  color:#0f172a;
-
-  letter-spacing:-0.03em;
+  color:#475569;
 
   font-variant-numeric:tabular-nums;
+
+  white-space:nowrap;
 }
 
 /* CHANGE */
 
 .change{
 
-  font-size:11px;
-  font-weight:700;
+  flex-shrink:0;
 
-  padding:4px 9px;
+  padding:4px 8px;
 
   border-radius:999px;
+
+  font-size:10px;
+  font-weight:700;
 
   font-variant-numeric:tabular-nums;
 }
@@ -327,7 +324,7 @@ body{
 
   color:#64748b;
 
-  font-size:14px;
+  font-size:13px;
   font-weight:600;
 }
 
@@ -346,7 +343,7 @@ body{
 
     <div class="live">
 
-      <div class="live-dot"></div>
+      <div class="dot"></div>
 
       LIVE
 
@@ -354,7 +351,7 @@ body{
 
   </div>
 
-  <div class="list" id="list">
+  <div class="grid" id="grid">
 
     <div class="loading">
       Loading FX Positions...
@@ -398,7 +395,6 @@ const COLORS={
   JOD:'#15803d',
 
   default:'#64748b'
-
 };
 
 /* FORMAT */
@@ -411,11 +407,12 @@ function formatNumber(n){
 
 }
 
-/* CREATE ROW */
+/* CREATE CARD */
 
-function createRow(currency,value,change){
+function createCard(currency,value,change){
 
-  const color=COLORS[currency] || COLORS.default;
+  const color=
+    COLORS[currency] || COLORS.default;
 
   let direction='flat';
 
@@ -426,15 +423,16 @@ function createRow(currency,value,change){
     direction='down';
   }
 
-  const sign=change > 0 ? '+' : '';
+  const sign=
+    change > 0 ? '+' : '';
 
-  const row=document.createElement('div');
+  const card=document.createElement('div');
 
-  row.className='row';
+  card.className='card';
 
-  row.style.setProperty('--accent',color);
+  card.style.setProperty('--accent',color);
 
-  row.innerHTML=`
+  card.innerHTML=`
 
     <div class="left">
 
@@ -444,35 +442,27 @@ function createRow(currency,value,change){
 
       </div>
 
-      <div class="info">
+      <div class="text">
 
         <div class="code">
           ${currency}
         </div>
 
-        <div class="sub">
-          Treasury Position
+        <div class="value">
+          ${formatNumber(value)}
         </div>
 
       </div>
 
     </div>
 
-    <div class="right">
-
-      <div class="value">
-        ${formatNumber(value)}
-      </div>
-
-      <div class="change ${direction}">
-        ${sign}${formatNumber(change)}
-      </div>
-
+    <div class="change ${direction}">
+      ${sign}${formatNumber(change)}
     </div>
 
   `;
 
-  return row;
+  return card;
 
 }
 
@@ -480,19 +470,22 @@ function createRow(currency,value,change){
 
 function render(rows){
 
-  const list=document.getElementById('list');
+  const grid=
+    document.getElementById('grid');
 
-  list.innerHTML='';
+  grid.innerHTML='';
 
   rows.forEach(row=>{
 
-    const el=createRow(
-      row.currency,
-      row.value,
-      row.change
-    );
+    grid.appendChild(
 
-    list.appendChild(el);
+      createCard(
+        row.currency,
+        row.value,
+        row.change
+      )
+
+    );
 
   });
 
@@ -505,10 +498,13 @@ async function loadData(){
   try{
 
     const worksheet=
-      tableau.extensions.worksheetContent.worksheet;
+      tableau.extensions
+      .worksheetContent
+      .worksheet;
 
     const reader=
-      await worksheet.getSummaryDataReaderAsync();
+      await worksheet
+      .getSummaryDataReaderAsync();
 
     let rows=[];
 
@@ -545,7 +541,7 @@ async function loadData(){
 
     console.error(err);
 
-    document.getElementById('list').innerHTML=`
+    document.getElementById('grid').innerHTML=`
 
       <div class="loading">
         Unable to load Tableau data
@@ -564,12 +560,15 @@ window.onload=async function(){
   await tableau.extensions.initializeAsync();
 
   const worksheet=
-    tableau.extensions.worksheetContent.worksheet;
+    tableau.extensions
+    .worksheetContent
+    .worksheet;
 
   await loadData();
 
   worksheet.addEventListener(
-    tableau.TableauEventType.SummaryDataChanged,
+    tableau.TableauEventType
+    .SummaryDataChanged,
     loadData
   );
 
